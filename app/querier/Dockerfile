@@ -6,8 +6,8 @@ COPY . .
 
 RUN go mod download
 
-RUN go build -o analytics ./cmd/server
+RUN go build -o querier ./cmd/server
 
-EXPOSE 3004
+EXPOSE 3000
 
-CMD [ "/app/analytics" ]
+CMD [ "/app/querier" ]
