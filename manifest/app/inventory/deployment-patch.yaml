@@ -26,6 +26,6 @@ spec:
             path: /api/inventory/health
         envFrom:
         - configMapRef:
-            name: app-configmap
+            name: inventory-configmap
         - secretRef:
-            name: app-secret
+            name: inventory-secret

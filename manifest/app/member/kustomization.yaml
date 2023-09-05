@@ -14,7 +14,7 @@ patchesStrategicMerge:
 
 configMapGenerator:
   - name: member-configmap
-    files:
+    envs:
       - config.env
 
 patches:
@@ -25,6 +25,14 @@ patches:
     target:
       kind: Namespace
       name: namespace
+
+  - patch : |-
+      - op: replace
+        path: /metadata/name
+        value: "member-service"
+    target:
+      kind: Deployment
+      name: app
 
   - patch: |-
       - op: replace

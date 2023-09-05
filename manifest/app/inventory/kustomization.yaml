@@ -15,7 +15,7 @@ patchesStrategicMerge:
 
 configMapGenerator:
   - name: inventory-configmap
-    files:
+    envs:
       - config.env
 
 patches:
@@ -26,6 +26,14 @@ patches:
     target:
       kind: Namespace
       name: namespace
+
+  - patch : |-
+      - op: replace
+        path: /metadata/name
+        value: "inventory-service"
+    target:
+      kind: Deployment
+      name: app
 
   - patch: |-
       - op: replace

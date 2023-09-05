@@ -18,6 +18,6 @@ spec:
             path: /api/member/health
         envFrom:
         - configMapRef:
-            name: app-configmap
+            name: member-configmap
         - secretRef:
-            name: app-secret
+            name: member-secret
