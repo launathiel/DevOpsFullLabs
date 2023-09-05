@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: root-devops-labs
+  name: querier-service
   namespace: argocd
 spec:
   destination:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: app/querier
+    path: manifest/app/querier
     repoURL: https://github.com/launathiel/DevOpsFullLabs.git
     targetRevision: HEAD
   syncPolicy:
