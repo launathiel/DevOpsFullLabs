@@ -1,5 +1,4 @@
 resources:
-  - "cluster-components.yaml"
   - "inventory.yaml"
   - "member.yaml"
   - "querier.yaml"

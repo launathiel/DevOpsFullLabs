@@ -59,3 +59,12 @@ data:
               }
             }
         }
+    credentials:
+      system:
+        domainCredentials:
+          - credentials:
+            - string:
+                scope: GLOBAL
+                id: "argocd-token"
+                secret: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhcmdvY2QiLCJzdWIiOiJwcm9qOmRlZmF1bHQ6amVua2lucy1kZXBsb3kiLCJuYmYiOjE2OTM5MzcwNjgsImlhdCI6MTY5MzkzNzA2OCwianRpIjoiamVua2lucy10b2tlbiJ9.4Ckkjndn7DE7hMfEMGMLz-HxcEYe__ile9j5WSVcRQc
+                description: "token for jenkins authenticating with argocd"

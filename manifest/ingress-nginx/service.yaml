@@ -10,6 +10,7 @@ metadata:
   name: ingress-nginx-controller
   namespace: ingress
 spec:
+  loadBalancerIP: 34.128.125.103
   externalTrafficPolicy: Local
   ipFamilies:
   - IPv4

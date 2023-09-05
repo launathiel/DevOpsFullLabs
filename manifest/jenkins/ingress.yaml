@@ -5,6 +5,7 @@ metadata:
   name: jekins-ingress
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
+    kubernetes.io/ingress.global-static-ip-name: nginx-ingress
 spec:
   ingressClassName: ingress-gateway
   rules:

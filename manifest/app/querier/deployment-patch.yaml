@@ -5,17 +5,17 @@ metadata:
 spec:
   template:
     spec:
-      serviceAccountName: member
+      serviceAccountName: querier
       containers:
       - name: app
         securityContext:
           runAsUser: 0
         readinessProbe:
           httpGet: 
-            path: /api/member/health
+            path: /health
         livenessProbe:
           httpGet: 
-            path: /api/member/health
+            path: /health
         envFrom:
         - configMapRef:
             name: querier-configmap
