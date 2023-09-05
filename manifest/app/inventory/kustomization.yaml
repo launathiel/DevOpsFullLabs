@@ -1,0 +1,64 @@
+namespace: inventory
+
+bases:
+  - ../base
+
+resources:
+  - secret.yaml
+
+commonLabels:
+  layer: backend
+  service: inventory
+
+patchesStrategicMerge:
+  - deployment-patch.yaml
+
+configMapGenerator:
+  - name: inventory-configmap
+    files:
+      - config.env
+
+patches:
+  - patch : |-
+      - op: replace
+        path: /metadata/name
+        value: "inventory"
+    target:
+      kind: Namespace
+      name: namespace
+
+  - patch: |-
+      - op: replace
+        path: /metadata/name
+        value: "inventory"
+    target:
+      kind: Service
+      name: app
+
+  - patch: |-
+      - op: replace
+        path: /metadata/name
+        value: "inventory"
+      - op: replace
+        path: /metadata/annotations
+        value:
+          kubernetes.io/service-account.name: "inventory-token"
+    target:
+      kind: ServiceAccount
+      name: app
+
+  - patch: |-
+      - op: replace
+        path: /metadata/name
+        value: "inventory-role"
+    target:
+      kind: ClusterRole
+      name: app
+
+  - patch: |-
+      - op: replace
+        path: /metadata/name
+        value: "inventory-rolebinding"
+    target:
+      kind: ClusterRoleBinding
+      name: app

@@ -1,0 +1,128 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins-dpl
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    spec:
+      securityContext:
+        runAsUser: 0
+      serviceAccountName: "jenkins-service-account"
+      initContainers:
+        - name: "plugins-init"
+          image: "jenkins/jenkins:2.421"
+          imagePullPolicy: "Always"
+          command: [ "jenkins-plugin-cli", "-f", "/var/jenkins_config/plugins.txt", "--plugin-download-directory", "/usr/share/jenkins/ref/plugins" ]
+          env:
+            - name: CASC_JENKINS_CONFIG
+              value: "/var/jenkins_home/jcasc/jcasc.yaml"
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 4096Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          volumeMounts:
+            - mountPath: /tmp
+              name: tmp
+            - mountPath: /var/jenkins_home
+              name: jenkins-home
+            - mountPath: /var/jenkins_config
+              name: jenkins-config
+            - mountPath: /usr/share/jenkins/ref/secrets/
+              name: secrets-dir
+            - mountPath: /usr/share/jenkins/ref/plugins
+              name: plugins
+      containers:
+        - name: jenkins
+          image: "jenkins/jenkins:2.421"
+          imagePullPolicy: "Always"
+          args: [ "--httpPort=8080"]
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: JAVA_OPTS
+              value: >
+                -Djenkins.install.runSetupWizard=false
+                -Duser.timezone=Asia/Jakarta
+                -Djenkins.model.Jenkins.crumbIssuerProxyCompatibility=true 
+                -Dpermissive-script-security.enabled=false
+            - name: JENKINS_OPTS
+              value: ""
+            - name: JENKINS_SLAVE_AGENT_PORT
+              value: 40001"
+            - name: CASC_JENKINS_CONFIG
+              value: "/var/jenkins_home/jcasc/jcasc.yaml"
+            - name: SECRETS
+              value: "/usr/share/jenkins/ref/secrets/"
+          ports:
+            - containerPort: 8080
+              name: http
+            - containerPort: 40001
+              name: slavelistener
+          livenessProbe:
+            httpGet:
+              path: "/login"
+              port: http
+            initialDelaySeconds: 120
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 10
+          readinessProbe:
+            httpGet:
+              path: "/login"
+              port: http
+            initialDelaySeconds: 120
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 10
+
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 4096Mi
+            requests:
+              cpu: 500m
+              memory: 3Gi
+          volumeMounts:
+            - mountPath: /tmp
+              name: tmp
+            - mountPath: /var/jenkins_home
+              name: jenkins-home
+              readOnly: false
+            - mountPath: /var/jenkins_home/jcasc/jcasc.yaml
+              name: jcasc-config
+            - mountPath: /var/jenkins_config/plugins.txt
+              name: plugins-config
+              readOnly: true
+            - mountPath: /usr/share/jenkins/ref/secrets/
+              name: secrets-dir
+              readOnly: true
+            - mountPath: /usr/share/jenkins/ref/plugins/
+              name: plugin-dir
+              readOnly: false
+
+      volumes:
+      - name: plugins
+        emptyDir: {}
+      - name: tmp
+        emptyDir: {}
+      - name: plugin-dir
+        emptyDir: {}
+      - name: secret-dir
+        emptyDir: {}
+      - name: plugins-config
+        configMap:
+          name: plugins-config
+      - name: jcasc-config
+        configMap:
+          name: jcasc-config
+      - name: jenkins-home
+        persistentVolumeClaim:
+          claimName: jenkins-pvc

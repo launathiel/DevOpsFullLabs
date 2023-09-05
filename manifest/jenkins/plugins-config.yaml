@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: plugins-config
+  labels:
+    service_name: jenkins
+data:
+  plugins.txt: |-
+    authorize-project:1.4.0
+    ansible:1.1
+    build-timeout:1.20
+    cloudbees-folder:6.722.v8165b_a_cf25e9
+    configuration-as-code:1559.v38a_b_2e3b_6b_b_7
+    credentials-binding:523.vd859a_4b_122e6
+    docker-workflow:521.v1a_a_dd2073b_2e
+    generic-webhook-trigger:1.84
+    gcp-secrets-manager-credentials-provider:0.2.6
+    git:4.12.1
+    git-parameter:0.9.17
+    github-branch-source:1598.v91207e9f9b_4a_
+    google-login:1.6
+    google-oauth-plugin:1.0.5
+    job-dsl:1.78.3
+    kubernetes:4029.v5712230ccb_f8
+    pam-auth:1.7
+    role-strategy:3.2.0
+    slack:616.v03b_1e98d13dd
+    ssh-slaves:1.806.v2253cedd3295
+    timestamper:1.17
+    workflow-aggregator:590.v6a_d052e5a_a_b_5
+    ws-cleanup:0.41
+    material-theme:0.4.1

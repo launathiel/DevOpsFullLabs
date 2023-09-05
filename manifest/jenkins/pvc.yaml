@@ -1,0 +1,12 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: jenkins-pvc
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  storageClassName: "standard"
+  resources:
+    requests:
+      storage: "5Gi"

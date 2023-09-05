@@ -1,0 +1,4 @@
+resources:
+  - "argocd-cm.yaml"
+  - "argocd-rbac.yaml"
+  - "install.yaml"

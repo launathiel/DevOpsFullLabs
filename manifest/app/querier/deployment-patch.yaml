@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+spec:
+  template:
+    spec:
+      serviceAccountName: member
+      containers:
+      - name: app
+        securityContext:
+          runAsUser: 0
+        readinessProbe:
+          httpGet: 
+            path: /api/member/health
+        livenessProbe:
+          httpGet: 
+            path: /api/member/health
+        envFrom:
+        - configMapRef:
+            name: app-configmap
+        - secretRef:
+            name: app-secret

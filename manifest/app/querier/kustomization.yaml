@@ -1,0 +1,60 @@
+namespace: querier
+bases:
+  - ../base
+
+commonLabels:
+  layer: backend
+  service: querier
+
+patchesStrategicMerge:
+  - deployment-patch.yaml
+
+configMapGenerator:
+  - name: querier-configmap
+    files:
+      - config.env
+
+patches:
+  - patch : |-
+      - op: replace
+        path: /metadata/name
+        value: "querier"
+    target:
+      kind: Namespace
+      name: namespace
+
+  - patch: |-
+      - op: replace
+        path: /metadata/name
+        value: "inventory"
+    target:
+      kind: Service
+      name: app
+
+  - patch: |-
+      - op: replace
+        path: /metadata/name
+        value: "querier"
+      - op: replace
+        path: /metadata/annotations
+        value:
+          kubernetes.io/service-account.name: "querier-token"
+    target:
+      kind: ServiceAccount
+      name: app
+
+  - patch: |-
+      - op: replace
+        path: /metadata/name
+        value: "querier-role"
+    target:
+      kind: ClusterRole
+      name: app
+
+  - patch: |-
+      - op: replace
+        path: /metadata/name
+        value: "querier-rolebinding"
+    target:
+      kind: ClusterRoleBinding
+      name: app

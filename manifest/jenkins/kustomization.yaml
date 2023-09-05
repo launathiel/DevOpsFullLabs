@@ -1,0 +1,14 @@
+namespace: jenkins
+commonLabels:
+  app: jenkins
+  layer: tools
+
+resources:
+  - namespace.yaml
+  - rbac.yaml
+  - pvc.yaml
+  - jcasc-config.yaml
+  - plugins-config.yaml
+  - master-dpl.yaml
+  - master-svc.yaml
+  - slave-svc.yaml

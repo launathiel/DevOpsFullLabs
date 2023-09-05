@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jcasc-config
+data:
+  jcasc.yaml: |-
+    jenkins:
+      systemMessage: "100% Immutable, All configuration for this jenkins is done as code (JCasC)"
+      numExecutors: 0
+      labelString: "master"
+      securityRealm:
+        local:
+          allowsSignup: false
+          users:
+          - id: admin
+            password: rahasia
+      authorizationStrategy:
+        globalMatrix:
+          permissions:
+            - "Overall/Administer:admin"
+            - "Overall/Read:authenticated"
+      remotingSecurity:
+        enabled: true
+      clouds:
+      - kubernetes:
+          containerCapStr: "50"
+          jenkinsTunnel: "jenkins-agent-svc.jenkins:50000"
+          jenkinsUrl: "http://jenkins-master-svc.jenkins:8080"
+          maxRequestsPerHostStr: "32"
+          name: "kubernetes"
+          namespace: "jenkins"
+          serverUrl: "https://x.x.x.x"
+    security:
+      queueItemAuthenticator:
+        authenticators:
+        - global:
+            strategy: triggeringUsersAuthorizationStrategy
+    unclassified:
+      location:
+        url: https://jenkins.pepago.my.id
+      themeManager:
+        disableUserThemes: true
+        theme: "material-red" # or 'material-indigo'
+    jobs:
+    - script: >
+        pipelineJob("initial_dsl_job_pipeline") {
+          definition {
+              cpsScm {
+                  scm {
+                      git{
+                        remote {
+                          url("https://github.com/launathiel/jenkins-dsl.git")
+                          scriptPath("Jenkinsfile")
+                        }
+                        branch('*/main')
+                      }
+                  }
+              }
+            }
+        }

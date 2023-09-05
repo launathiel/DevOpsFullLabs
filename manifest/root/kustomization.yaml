@@ -1,0 +1,11 @@
+bases:
+  # INFRA PLATFORM
+  - ../jenkins
+  - ../argocd/base
+  - ../ingress-nginx
+  # - ../monitoring/overlays/production
+  # - ../logging/overlays/production
+  # APPS
+  # - ../app/inventory
+  # - ../app/member
+  # - ../app/querier
