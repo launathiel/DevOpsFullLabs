@@ -2,31 +2,30 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: plugins-config
-  labels:
-    service_name: jenkins
 data:
+  initPlugins.sh: |-
+    cp /var/jenkins_config/plugins.txt /var/jenkins_home;
+    rm -rf /usr/share/jenkins/ref/plugins/*.lock
+    jenkins-plugin-cli --plugin-file /var/jenkins_home/plugins.txt --plugin-download-directory /usr/share/jenkins/ref/plugins --latest false --verbose
+    yes n | cp -i /usr/share/jenkins/ref/plugins/* /var/jenkins_plugins/;
   plugins.txt: |-
     authorize-project:1.4.0
     ansible:1.1
-    build-timeout:1.20
-    cloudbees-folder:6.722.v8165b_a_cf25e9
-    configuration-as-code:1559.v38a_b_2e3b_6b_b_7
-    credentials-binding:523.vd859a_4b_122e6
-    docker-workflow:521.v1a_a_dd2073b_2e
+    blueocean:1.27.4
+    cloudbees-folder:6.848.ve3b_fd7839a_81
+    configuration-as-code:1700.v6f448841296e
+    credentials-binding:631.v861c06d062b_4
     generic-webhook-trigger:1.84
-    gcp-secrets-manager-credentials-provider:0.2.6
-    git:4.12.1
+    git:5.0.1
     git-parameter:0.9.17
     github-branch-source:1598.v91207e9f9b_4a_
-    google-login:1.6
-    google-oauth-plugin:1.0.5
-    job-dsl:1.78.3
+    job-dsl:1.85
     kubernetes:4029.v5712230ccb_f8
     pam-auth:1.7
     role-strategy:3.2.0
-    slack:616.v03b_1e98d13dd
     ssh-slaves:1.806.v2253cedd3295
     timestamper:1.17
     workflow-aggregator:590.v6a_d052e5a_a_b_5
+    workflow-job:1342.v046651d5b_dfe
+    workflow-cps:3774.v4a_d648d409ce
     ws-cleanup:0.41
-    material-theme:0.4.1

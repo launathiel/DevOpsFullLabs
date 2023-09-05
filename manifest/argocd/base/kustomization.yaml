@@ -1,4 +1,9 @@
+namespace: argocd
+commonLabels:
+  app: argocd
+  layer: tools
 resources:
+  - "install.yaml"
   - "argocd-cm.yaml"
   - "argocd-rbac.yaml"
-  - "install.yaml"
+  - "ingress.yaml"

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongoname
+spec:
+  serviceName: mongoname-service
+  replicas: 1
+  template:
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: mongod-container
+          image: mongo:4.4.6
+          command:
+            - "mongod"
+            - "--bind_ip"
+            - "0.0.0.0"
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "200m"
+            limits:
+              memory: "1024Mi"
+              cpu: "400m"
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - mountPath: /data/db 
+              name: mongoname-pvc           
+  volumeClaimTemplates:
+  - metadata:
+      name: mongoname-pvc
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+      storageClassName: standard

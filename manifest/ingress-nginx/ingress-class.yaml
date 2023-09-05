@@ -9,4 +9,4 @@ metadata:
     app.kubernetes.io/version: 1.5.1
   name: ingress-gateway
 spec:
-  controller: k8s.io/ingress-nginx
+  controller: k8s.io/labs-ingress

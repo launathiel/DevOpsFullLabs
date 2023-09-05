@@ -12,3 +12,4 @@ resources:
   - master-dpl.yaml
   - master-svc.yaml
   - slave-svc.yaml
+  - ingress.yaml

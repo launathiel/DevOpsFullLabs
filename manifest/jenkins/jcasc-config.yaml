@@ -6,7 +6,10 @@ data:
   jcasc.yaml: |-
     jenkins:
       systemMessage: "100% Immutable, All configuration for this jenkins is done as code (JCasC)"
-      numExecutors: 0
+      agentProtocols:
+      - "JNLP4-connect"
+      - "Ping"
+      numExecutors: 5
       labelString: "master"
       securityRealm:
         local:
@@ -24,12 +27,13 @@ data:
       clouds:
       - kubernetes:
           containerCapStr: "50"
-          jenkinsTunnel: "jenkins-agent-svc.jenkins:50000"
+          jenkinsTunnel: "jenkins-slave-svc.jenkins:40001"
           jenkinsUrl: "http://jenkins-master-svc.jenkins:8080"
           maxRequestsPerHostStr: "32"
           name: "kubernetes"
           namespace: "jenkins"
-          serverUrl: "https://x.x.x.x"
+          serverUrl: "https://34.101.59.138"
+      slaveAgentPort: 40001
     security:
       queueItemAuthenticator:
         authenticators:
@@ -38,9 +42,6 @@ data:
     unclassified:
       location:
         url: https://jenkins.pepago.my.id
-      themeManager:
-        disableUserThemes: true
-        theme: "material-red" # or 'material-indigo'
     jobs:
     - script: >
         pipelineJob("initial_dsl_job_pipeline") {

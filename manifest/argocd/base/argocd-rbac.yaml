@@ -9,9 +9,6 @@ metadata:
     app.kubernetes.io/name: argocd-rbac-cm
     app.kubernetes.io/part-of: argocd
   name: argocd-rbac-cm
-  namespace: argocd
-  resourceVersion: "107655571"
-  uid: fccf5509-bbd4-4060-8235-f6738ec39979
 data:
   policy.csv: |
     p, role:org-admin, applications, *, */*, allow

@@ -5,7 +5,6 @@ bases:
   - ../ingress-nginx
   # - ../monitoring/overlays/production
   # - ../logging/overlays/production
-  # APPS
-  # - ../app/inventory
-  # - ../app/member
-  # - ../app/querier
+  # MONGODB
+  - ../mongodb/overlays/inventory
+  - ../mongodb/overlays/member

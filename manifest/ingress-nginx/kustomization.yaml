@@ -1,3 +1,4 @@
+namespace: ingress
 resources:
   - namespace.yaml
   - rbac.yaml

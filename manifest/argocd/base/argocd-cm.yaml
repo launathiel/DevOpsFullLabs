@@ -9,9 +9,6 @@ metadata:
     app.kubernetes.io/name: argocd-cm
     app.kubernetes.io/part-of: argocd
   name: argocd-cm
-  namespace: argocd
-  resourceVersion: "107655564"
-  uid: dc4822fd-a8d5-4852-98b3-da5aa5863eae
 data:
   accounts.nathan: apiKey, login
   accounts.admin: apiKey, login

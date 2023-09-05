@@ -1,0 +1,5 @@
+resources:
+  - "root.yaml"
+  - "inventory.yaml"
+  - "member.yaml"
+  - "querier.yaml"

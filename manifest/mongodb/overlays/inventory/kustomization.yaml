@@ -1,0 +1,36 @@
+namespace: inventory
+commonLabels:
+  app: mongodb
+bases:
+  - ../../base
+
+patches:
+  - patch : |-
+      - op: replace
+        path: /metadata/name
+        value: "inventory"
+    target:
+      kind: Namespace
+      name: namespace
+      
+  - patch: |-
+      - op: replace
+        path: /metadata/name
+        value: inventory-mongo
+      - op: replace
+        path: /spec/template/spec/containers/0/volumeMounts/0/name
+        value: stg-mongo-pvc
+      - op: replace
+        path: /spec/volumeClaimTemplates/0/metadata/name
+        value: stg-mongo-pvc
+    target:
+      kind: StatefulSet
+      name: mongoname
+
+  - patch: |-
+      - op: replace
+        path: /metadata/name
+        value: inventory-mongo-svc
+    target: 
+      kind: Service
+      name: mongoname-service
