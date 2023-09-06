@@ -42,7 +42,7 @@ func server() error {
 	r.Use(middlewares.CORSMiddleware())
 	// router
 	r.GET("/health", apis.HealthCheck)
-	r.GET("/", middlewares.TokenAuthMiddleware(), apis.GetQuerier )
+	r.GET("/", apis.GetQuerier )
 	r.GET("/inventory", middlewares.TokenAuthMiddleware(), apis.GetInventory )
 	r.GET("/member", middlewares.TokenAuthMiddleware(), apis.GetMember )
 
