@@ -4,10 +4,15 @@ metadata:
   namespace: inventory
   name: member-ingress
   annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt"
     nginx.ingress.kubernetes.io/use-regex: "true"
     kubernetes.io/ingress.global-static-ip-name: nginx-ingress
 spec:
   ingressClassName: ingress-gateway
+  tls:
+    - hosts:
+      - devopslabs.pepago.my.id
+      secretName: member-tls
   rules:
     - host: devopslabs.pepago.my.id
       http:
