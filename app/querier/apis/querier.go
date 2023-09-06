@@ -89,7 +89,7 @@ func GetQuerier(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "ok",
 		"backend": "go-1.19.4",
-		"version": "v0.0.1",
+		"version": "v0.3",
 		"member": memberResponseObject,
 		"inventory": inventoryResponseObject,
 	})
