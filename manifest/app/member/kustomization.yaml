@@ -4,6 +4,7 @@ bases:
 
 resources:
   - secret.yaml
+  - ingress.yaml
 
 commonLabels:
   layer: backend

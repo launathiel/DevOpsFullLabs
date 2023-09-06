@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: querier
+  name: querier-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    kubernetes.io/ingress.global-static-ip-name: nginx-ingress
+spec:
+  ingressClassName: ingress-gateway
+  rules:
+    - host: devopslabs.pepago.my.id
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: querier
+                port:
+                  number: 3000

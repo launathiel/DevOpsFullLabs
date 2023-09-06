@@ -2,6 +2,9 @@ namespace: querier
 bases:
   - ../base
 
+resources:
+  - ingress.yaml
+
 commonLabels:
   layer: backend
   service: querier
@@ -34,7 +37,7 @@ patches:
   - patch: |-
       - op: replace
         path: /metadata/name
-        value: "inventory"
+        value: "querier"
     target:
       kind: Service
       name: app

@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: inventory
+  name: member-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    kubernetes.io/ingress.global-static-ip-name: nginx-ingress
+spec:
+  ingressClassName: ingress-gateway
+  rules:
+    - host: devopslabs.pepago.my.id
+      http:
+        paths:
+          - path: /api/member/
+            pathType: Prefix
+            backend:
+              service:
+                name: member
+                port:
+                  number: 3000
