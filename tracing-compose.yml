@@ -1,0 +1,124 @@
+version: '3.7'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.14
+    container_name: elasticsearch
+    environment:
+      - cluster.name=test-cluster
+      - path.data=/usr/share/elasticsearch/data
+      - discovery.type=single-node
+      - xpack.security.enabled=true
+      - xpack.security.audit.enabled=true
+      - ELASTIC_PASSWORD=nathan123
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - .data/elasticsearch:/usr/share/elasticsearch/data
+    networks:
+      - labs-network
+    ports:
+      - 9200:9200
+      - 9300:9300
+
+  otelcol:
+    image: otel/opentelemetry-collector:0.88.0
+    container_name: otel-col
+    command: [ "--config=/etc/otelcol-config.yml" ]
+    volumes:
+      - ./otelcol-config.yml:/etc/otelcol-config.yml
+    ports:
+      - "4317" # OTLP over gRPC receiver
+      - "4318" # OTLP over HTTP receiver
+    networks:
+      - labs-network
+    restart: on-failure
+    depends_on:
+      - jaeger-collector
+
+  # jaeger-agent:
+  #   image: jaegertracing/jaeger-agent:1.51
+  #   hostname: jaeger-agent
+  #   command: ["--reporter.grpc.host-port=jaeger-collector:14250"]
+  #   ports:
+  #     - "5775:5775/udp"
+  #     - "6831:6831/udp"
+  #     - "6832:6832/udp"
+  #     - "5778:5778"
+  #   networks:
+  #     - labs-network
+  #   restart: on-failure
+  #   environment:
+  #     - SPAN_STORAGE_TYPE=elasticsearch
+  #   depends_on:
+  #     - jaeger-collector
+
+  jaeger-collector:
+    image: jaegertracing/jaeger-collector:1.51
+    ports:
+      - "14269:14269"
+      - "14268:14268"
+      - "14267:14267"
+      - "14250:14250"
+      - "9411:9411"
+      - "4317:4317"
+      - "4318:4318"
+    networks:
+      - labs-network
+    restart: on-failure
+    environment:
+      - SPAN_STORAGE_TYPE=elasticsearch
+    command: [
+      "--es.server-urls=http://elastic:nathan123@elasticsearch:9200",
+      "--es.create-index-templates=true",
+      "--es.version=7",
+      "--es.num-shards=1",
+      "--es.num-replicas=0",
+      "--log-level=info"
+    ]
+    depends_on:
+      - elasticsearch
+
+  jaeger-query:
+    image: jaegertracing/jaeger-query:1.51
+    environment:
+      - SPAN_STORAGE_TYPE=elasticsearch
+      - no_proxy=localhost
+    ports:
+      - "16686:16686"
+      - "16687:16687"
+    networks:
+      - labs-network
+    restart: on-failure
+    command: [
+      "--es.server-urls=http://elastic:nathan123@elasticsearch:9200",
+      "--span-storage.type=elasticsearch",
+      "--log-level=debug"
+    ]
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.17.14
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=kibana_system123
+    ports:
+      - 5601:5601
+    networks:
+      - labs-network
+    depends_on:
+      - elasticsearch
+
+networks:
+    labs-network:
+        external: true
