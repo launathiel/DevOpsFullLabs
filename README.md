@@ -37,4 +37,18 @@ CI/CD pipeline running on top of jenkins that running on kubernetes. It will cre
 ### Lens
 ![](./image/lens.png)
 
+# Quick Start
+```
+# modify .env.test file as environment variable
+docker network create labs-network
+docker-compose up -d --build
+```
+
+## ToDo
+- Implement redis as cache
+- Create 1 service that connect to postgresql
+- Create tracing using opentelemetry
+- Setup OTEL collector
+- Setup jager with elasticsearch
+
 keep exploring and learning, cheers!

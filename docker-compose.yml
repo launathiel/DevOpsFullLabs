@@ -1,0 +1,82 @@
+version: "3.7"
+
+services:
+  mongodb:
+    image: mongo:7.0.2
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: nathan123
+    volumes:
+      - .data/mongodb:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - labs-network
+  postgresql:
+    image: postgres:16.0
+    environment:
+      POSTGRES_PASSWORD: nathan123
+    volumes:
+      - .data/postgesql:/var/lib/postgresql/data/
+    ports:
+      - "5434:5432"
+    networks:
+      - labs-network
+  redis:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server
+    volumes: 
+      - .data/redis:/data
+    networks:
+      - labs-network
+  inventory:
+    container_name: inventory-service
+    build:
+      context: ./app/inventory
+      dockerfile: Dockerfile
+    restart: always
+    networks:
+      - labs-network
+    ports:
+      - "3001:3000"
+    env_file:
+      - app/inventory/.env.test
+    depends_on:
+      - mongodb
+      - redis
+  member:
+    container_name: member-service
+    build:
+      context: ./app/member
+      dockerfile: Dockerfile
+    restart: always
+    networks:
+      - labs-network
+    ports:
+      - "3002:3000"
+    env_file:
+      - app/member/.env.test
+    depends_on:
+      - mongodb
+      - redis
+  querier:
+    container_name: querier-service
+    build:
+      context: ./app/querier
+      dockerfile: Dockerfile
+    restart: always
+    networks:
+      - labs-network
+    ports:
+      - "3003:3000"
+    env_file:
+      - app/querier/.env.test
+    depends_on:
+      - member
+      - inventory
+networks:
+    labs-network:
+        external: true
