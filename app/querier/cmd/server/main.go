@@ -62,6 +62,7 @@ func initTracer() func(context.Context) error{
 			sdktrace.WithResource(resources),
 		),
 	)
+	log.Info().Msg("tracing initialized")
 	return exporter.Shutdown
 }
 

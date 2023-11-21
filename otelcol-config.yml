@@ -14,7 +14,7 @@ processors:
     spike_limit_mib: 100
     check_interval: 5s
 exporters:
-  otlp/jaeger:
+  otlp:
     endpoint: "jaeger-collector:14250"
     tls:
       insecure: true
@@ -24,4 +24,4 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch, memory_limiter]
-      exporters: [otlp/jaeger]
+      exporters: [otlp]
